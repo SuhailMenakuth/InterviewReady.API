@@ -1,0 +1,18 @@
+.env* 
+              
+*.log
+*.suo
+*.user
+*.cache
+.DS_Store
+
+# Ignore .NET migrations folder
+**/Migrations/
+# --- .NET ---
+**/.vs/
+**/bin/
+**/obj/
+**/.vs/
+**/TestResults/
+*.userprefs
+*.nupkg

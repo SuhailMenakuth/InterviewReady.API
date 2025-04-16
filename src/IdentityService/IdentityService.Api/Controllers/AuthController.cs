@@ -1,4 +1,5 @@
-﻿using IdentiService.Application.Features.Auth.Commands.LoginUser;
+﻿using IdentiService.Application.Features.Auth.Commands.EmailVerification;
+using IdentiService.Application.Features.Auth.Commands.LoginUser;
 using IdentiService.Application.Features.Auth.Commands.RegisterUser;
 using IdentiService.Application.Features.Auth.Dtos;
 using MediatR;
@@ -40,5 +41,20 @@ namespace IdentityService.Api.Controllers
             var result = await _mediator.Send(command,cancellationToken);
             return Ok(new { message = "login successfull" , token = result});
         }
+        [HttpPost("send-otp")]
+        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequestDto dto , CancellationToken cancellationToken)
+        {
+            var command = new SendOtpCommand(dto.email);
+            var result = await _mediator.Send(command,cancellationToken);
+            return Ok(new { Message = result });
+        }
+
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequestDto dto ,CancellationToken cancellationToken)
+        {
+            var command = new VerifyOtpCommand(dto.Email, dto.Otp);
+            var result = await _mediator.Send(command,cancellationToken);
+            return Ok(new { Message = result });
+        }
     }
-}
+} 

@@ -1,4 +1,6 @@
-﻿namespace IdentityService.Api.Middlewares
+﻿using IdentiService.Application.Exceptions;
+
+namespace IdentityService.Api.Middlewares
 {
     public class GlobalExceptionHandlerMiddleware
     {
@@ -17,12 +19,17 @@
             {
                 await _next(context); 
             }
+            catch (NotFoundException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await WriteErrorResponse(context, ex.Message, false);
+            }
             catch (ApplicationException ex) 
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await WriteErrorResponse(context, ex.Message, false);
             }
-            catch (Exception ex) // For unhandled or unexpected errors
+            catch (Exception ex) 
             {
                 _logger.LogError(ex, ex.Message);
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;

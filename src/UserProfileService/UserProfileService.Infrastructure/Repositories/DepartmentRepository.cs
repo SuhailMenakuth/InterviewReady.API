@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IdentityService.Domain.Enums
+namespace UserProfileService.Infrastructure.Repositories
 {
-    public enum UserType
+    internal class DepartmentRepository
     {
-        Admin = 1,
-        Interviewer = 2 ,
-        Candidate = 3 
     }
 }

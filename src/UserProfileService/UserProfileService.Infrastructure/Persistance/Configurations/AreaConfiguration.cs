@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IdentityService.Domain.Enums
+namespace UserProfileService.Infrastructure.Persistance.Configurations
 {
-    public enum UserType
+    internal class AreaConfiguration
     {
-        Admin = 1,
-        Interviewer = 2 ,
-        Candidate = 3 
     }
 }

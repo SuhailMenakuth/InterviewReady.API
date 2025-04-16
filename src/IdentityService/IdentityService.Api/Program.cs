@@ -4,7 +4,9 @@ using IdentiService.Application;
 using IdentiService.Application.Features.Auth.Validators;
 using IdentityService.Api.Middlewares;
 using IdentityService.Infrastructure;
+using IdentityService.Infrastructure.BackgroundServices;
 using Serilog;
+using System.Text.Json.Serialization;
 
 namespace IdentityService.Api
 {
@@ -29,8 +31,11 @@ namespace IdentityService.Api
 
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
-            builder.Services.AddControllers();
-
+            builder.Services.AddHostedService<OtpCleanupBackgroundService>();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<UserRegistrationValidator>();
 
@@ -38,6 +43,19 @@ namespace IdentityService.Api
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:5173" , "http://localhost:5174")
+                               .AllowCredentials()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+
+                    });
+            });
 
             var app = builder.Build();
 
@@ -47,7 +65,7 @@ namespace IdentityService.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors("AllowSpecificOrigin");
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             app.UseHttpsRedirection();
             app.UseAuthorization();

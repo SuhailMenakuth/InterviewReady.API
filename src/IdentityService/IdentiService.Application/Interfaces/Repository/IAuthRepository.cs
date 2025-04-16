@@ -9,9 +9,13 @@ namespace IdentiService.Application.Interfaces.Repository
 {
     public interface IAuthRepository
     {
+        
         Task<User?> GetUserByEmailAsync(string email);
-        Task AddUserAsync(User cstmr);
-        Task<bool> UserExistsByEmailAsync(string email);
-        Task<bool> UserExistsByPhoneAsync(string phoneNumber);
+        Task<User?> GetVerifiedUserByEmailAsync(string email);
+        Task AddUserAsync(User user);
+        Task UpdateUserAsync();
+        Task<bool> IsUserEmailVerifiedAsync(string email);
+        Task<bool> IsUserPhoneNumberVerifiedAsync(string phoneNumber);
+        Task<bool> IsUserUnverifiedByEmailAsync(string email);
     }   
 }   

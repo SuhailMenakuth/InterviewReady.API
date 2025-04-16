@@ -14,6 +14,8 @@ namespace IdentityService.Domain.Entities
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
-        public UserTypes UserType { get; }
+        public UserType UserType { get; set; }
+        public bool IsVerified { get; set; } = false;
+
     }
 }

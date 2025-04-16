@@ -21,52 +21,48 @@ namespace IdentityService.Infrastructure.Repositories
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            try
-            {
 
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email );
+           
+        }
+
+       public async Task<User?> GetVerifiedUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.IsVerified == true);
         }
 
         public async Task AddUserAsync(User usr)
         {
-            try
-            {
-
+           
                 await _context.Users.AddAsync(usr);
                 await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+        }
+        
+        public async Task UpdateUserAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> UserExistsByEmailAsync(string email)
+        public async Task<bool> IsUserEmailVerifiedAsync(string email)
         {
-            try
-            {
-                return await _context.Users.AnyAsync(c => c.Email == email);
-            } catch (Exception)
-            {
-                throw;
-            }
+           
+                return await _context.Users.AnyAsync(c => c.Email == email && c.IsVerified == true);
+           
         }
-        public async Task<bool> UserExistsByPhoneAsync(string phoneNumber)
+        public async Task<bool> IsUserPhoneNumberVerifiedAsync(string phoneNumber)
         {
-            try
-            {
-                return await _context.Users.AnyAsync(u => u.PhoneNumber == phoneNumber);
+           
+                return await _context.Users.AnyAsync(u => u.PhoneNumber == phoneNumber && u.IsVerified == true);
+  
+        }
 
-            }
-            catch(Exception)
-            {
-                throw;
-            }
+        public async Task<bool> IsUserUnverifiedByEmailAsync(string email)
+        {
+
+            return await _context.Users.AnyAsync(u => u.Email == email && u.IsVerified == false);
+
+
         }
+
     }
 }

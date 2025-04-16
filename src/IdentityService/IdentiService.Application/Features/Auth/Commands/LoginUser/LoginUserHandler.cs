@@ -1,4 +1,5 @@
-﻿using IdentiService.Application.Features.Auth.Dtos;
+﻿using IdentiService.Application.Exceptions;
+using IdentiService.Application.Features.Auth.Dtos;
 using IdentiService.Application.Interfaces.Repository;
 using IdentiService.Application.Interfaces.Services;
 using MediatR;
@@ -23,9 +24,8 @@ namespace IdentiService.Application.Features.Auth.Commands.LoginUser
         }
         public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _authRepository.GetUserByEmailAsync(request.userLoginDto.email);
-
-            if (user == null || !_passwordHasher.VerifyPassword(request.userLoginDto.password, user.Password))
+            var user = await _authRepository.GetVerifiedUserByEmailAsync(request.userLoginDto.email) ?? throw new NotFoundException("user not found");
+            if ( !_passwordHasher.VerifyPassword(request.userLoginDto.password, user.Password))
             {
                 throw new ApplicationException("Invalid username or password");
             }

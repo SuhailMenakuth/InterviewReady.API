@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistance\Configurations\" />
+    <ProjectReference Include="..\UserProfileService.Application\UserProfileService.Application.csproj" />
+    <ProjectReference Include="..\UserProfileService.Domain\UserProfileService.Domain.csproj" />
   </ItemGroup>
 
 </Project>

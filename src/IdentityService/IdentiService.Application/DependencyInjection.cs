@@ -13,10 +13,8 @@ namespace IdentiService.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            // Register MediatR (if used)
-             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-            // Ensure FluentValidation is correctly registered
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;

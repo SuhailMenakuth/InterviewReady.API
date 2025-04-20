@@ -7,7 +7,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using UserProfileService.Application.Interfaces.Repository.Repository;
 using UserProfileService.Infrastructure.Persistance;
+using UserProfileService.Infrastructure.Repositories;
 
 namespace UserProfileService.Infrastructure
 {
@@ -23,6 +25,7 @@ namespace UserProfileService.Infrastructure
                     sqlOptions => sqlOptions.EnableRetryOnFailure()
                 ));
 
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             return services;
         }
     }

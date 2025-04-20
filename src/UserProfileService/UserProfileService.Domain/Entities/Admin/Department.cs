@@ -10,6 +10,6 @@ namespace UserProfileService.Domain.Entities.Admin
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Area> Areas { get; set; }
+        public ICollection<Area> Areas { get; set; } = new List<Area>();
     }
 }

@@ -1,4 +1,9 @@
 
+
+using Serilog;
+using UserProfileService.Application;
+using UserProfileService.Infrastructure;
+
 namespace UserService.Api
 {
     public class Program
@@ -7,16 +12,37 @@ namespace UserService.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddApplicationServices();
+            builder.Services.AddPersistanceService(builder.Configuration);
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+          
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
+            builder.Host.UseSerilog();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:5173", "http://localhost:5174")
+                               .AllowCredentials()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+
+                    });
+            });
 
             var app = builder.Build();
+            app.UseCors("AllowSpecificOrigin");
 
-            // Configure the HTTP request pipeline.
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

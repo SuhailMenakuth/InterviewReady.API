@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserProfileService.Domain.Entities.Admin;
 
-namespace UserProfileService.Application.Interfaces.Repository.Repository
+namespace UserProfileService.Application.Interfaces.Repository
 {
     public interface IDepartmentRepository
     {

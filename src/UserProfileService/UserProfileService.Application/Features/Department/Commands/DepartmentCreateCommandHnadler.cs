@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UserProfileService.Application.Interfaces.Repository.Repository;
+using UserProfileService.Application.Interfaces.Repository;
 using UserProfileService.Domain.Entities.Admin;
 
 namespace UserProfileService.Application.Features.Department.Commands

@@ -1,6 +1,7 @@
 
 
 using Serilog;
+using UserProfileService.Api.Middlewares;
 using UserProfileService.Application;
 using UserProfileService.Infrastructure;
 
@@ -11,6 +12,11 @@ namespace UserService.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            DotNetEnv.Env.Load();
+
+            builder.Configuration
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
 
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistanceService(builder.Configuration);
@@ -48,7 +54,7 @@ namespace UserService.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

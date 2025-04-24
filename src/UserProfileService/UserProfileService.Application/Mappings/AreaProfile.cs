@@ -5,20 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UserProfileService.Application.Features.Area.Dtos;
-using UserProfileService.Application.Features.Department.Dtos;
 using UserProfileService.Domain.Entities.Admin;
 
 namespace UserProfileService.Application.Mappings
 {
-    public class DepartmentProfile : Profile
+    public class AreaProfile : Profile
     {
-       public DepartmentProfile() {
-
-            CreateMap<Department, DepartmentCreateDto>().ReverseMap();
-            CreateMap<Department, DepartmentDto>();
+        public AreaProfile()
+        {
             CreateMap<Area, AreaDto>();
-            CreateMap<DepartmentUpdateDto, Department>();
-
+            CreateMap<Area, AreaCreateDto>().ReverseMap();
+            CreateMap<Area ,AreaUpdateDto>().ReverseMap();
         }
     }
 }

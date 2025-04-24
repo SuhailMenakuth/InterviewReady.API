@@ -1,5 +1,7 @@
 ﻿
 
+using UserProfileService.Application.Exceptions;
+
 namespace UserProfileService.Api.Middlewares
 {
     public class GlobalExceptionHandlerMiddleware
@@ -19,11 +21,11 @@ namespace UserProfileService.Api.Middlewares
             {
                 await _next(context);
             }
-            //catch (NotFoundException ex)
-            //{
-            //    context.Response.StatusCode = StatusCodes.Status404NotFound;
-            //    await WriteErrorResponse(context, ex.Message, false);
-            //}
+            catch (NotFoundException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await WriteErrorResponse(context, ex.Message, false);
+            }
             catch (ApplicationException ex)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;

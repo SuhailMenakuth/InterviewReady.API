@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserProfileService.Application.Interfaces.Repository.Repository;
+using UserProfileService.Application.Interfaces.Repository;
 using UserProfileService.Domain.Entities.Admin;
 using UserProfileService.Infrastructure.Persistance;
 

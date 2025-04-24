@@ -16,7 +16,7 @@ namespace IdentiService.Application.Features.Auth.Validators
                 .EmailAddress().WithMessage("Invalid email address");
 
             RuleFor(x => x.password)
-                .NotEmpty().WithMessage("password cannotbe empty");
+                .NotEmpty().WithMessage("password cannot be empty");
         
         }
     }

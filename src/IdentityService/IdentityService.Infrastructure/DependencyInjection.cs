@@ -40,10 +40,10 @@ namespace IdentityService.Infrastructure
                     Credentials = new NetworkCredential(emailConfig.SmtpUser, emailConfig.SmtpPass),
                     EnableSsl = true,
                 });
-            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAccessTokenGenerator, AccessTokenGenerator>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IEmailVerificationRepository, EmailVerificationRepository>();
 
 

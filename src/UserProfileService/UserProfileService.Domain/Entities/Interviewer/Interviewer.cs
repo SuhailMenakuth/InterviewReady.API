@@ -10,7 +10,7 @@ namespace UserProfileService.Domain.Entities.Interviewer
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string About { get; set; }
+        public string? About { get; set; }
         public string Photo { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }

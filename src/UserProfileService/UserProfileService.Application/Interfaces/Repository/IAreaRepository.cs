@@ -9,12 +9,7 @@ namespace UserProfileService.Application.Interfaces.Repository
 {
     public interface IAreaRepository
     {
-        //Task<bool> IsDepartmentAlreadyExist(string name);
-        //Task AddAsync(Department department);
-        //Task DeleteAsync(Department department);
-        //Task UpdateAsync(Department department);
-        //Task<IReadOnlyList<Department>> GetAllAsync();
-        //Task<Department?> GetByIdAsync(int id);
+      
 
 
         Task<bool> IsAreaAlreadyExist(int departmentId , string area);
@@ -23,6 +18,7 @@ namespace UserProfileService.Application.Interfaces.Repository
         Task UpdateAsync(Area area);
         Task<ICollection<Area>> GetAllAsync();
         Task<Area> GetByIdAsync(int id);
+        Task<List<Area>> GetAreasByIdsAsync(List<int> areaIds, CancellationToken cancellationToken);
 
     }
 }

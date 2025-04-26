@@ -56,5 +56,12 @@ namespace UserProfileService.Infrastructure.Repositories
                 .Include(a => a.Department)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
+
+        public async Task<List<Area>> GetAreasByIdsAsync(List<int> areaIds, CancellationToken cancellationToken)
+        {
+            return await _context.Areas
+                .Where(a => areaIds.Contains(a.Id))
+                .ToListAsync(cancellationToken);
+        }
     }
 }

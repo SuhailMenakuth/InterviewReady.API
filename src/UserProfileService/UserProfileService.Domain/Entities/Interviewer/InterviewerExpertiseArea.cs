@@ -10,8 +10,8 @@ namespace UserProfileService.Domain.Entities.Interviewer
     public class InterviewerExpertiseArea
     {
         public Guid InterviewerId { get; set; }
-        public required Interviewer Interviewer { get; set; }
+        public  Interviewer Interviewer { get; set; }
         public int ExpertiseAreaId { get; set; }
-        public required Area Area { get; set; }
+        public  Area Area { get; set; }
     }
 }

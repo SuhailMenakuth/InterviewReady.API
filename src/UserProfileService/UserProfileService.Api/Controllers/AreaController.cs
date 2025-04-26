@@ -34,7 +34,7 @@ namespace UserProfileService.Api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var command = new AreaDeleteCommand(id);

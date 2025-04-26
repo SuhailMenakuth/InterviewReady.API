@@ -29,9 +29,11 @@ namespace UserProfileService.Infrastructure.Persistance.Configurations
 
 
             builder.Property(i => i.CreatedOn)
+                   .HasDefaultValueSql("GETDATE()")
                    .IsRequired();
 
             builder.Property(i => i.UpdatedOn)
+                   .HasDefaultValueSql("GETDATE()")
                    .IsRequired();
 
             builder.Property(i => i.IsDeleted)

@@ -8,8 +8,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UserProfileService.Application.Interfaces.Repository;
+using UserProfileService.Application.Interfaces.Service;
 using UserProfileService.Infrastructure.Persistance;
 using UserProfileService.Infrastructure.Repositories;
+using UserProfileService.Infrastructure.Services;
 
 namespace UserProfileService.Infrastructure
 {
@@ -27,6 +29,8 @@ namespace UserProfileService.Infrastructure
 
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IAreaRepository, AreaRepository>();
+            services.AddScoped<IInterviewRepository , InterviewRepository>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
             return services;
         }
     }

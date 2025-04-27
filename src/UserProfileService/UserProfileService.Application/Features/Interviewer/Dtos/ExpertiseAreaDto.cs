@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace UserProfileService.Application.Features.Interviewer.Dtos
 {
-    public class InterviewerExpertiseAreaDto
+    public class ExpertiseAreaDto
     {
-
+        public int id { get; set; }
+        public string name { get; set; }
+        public string departmentName { get; set; }
     }
 }

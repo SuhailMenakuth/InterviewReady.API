@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserProfileService.Application.Interfaces.Repository;
 using UserProfileService.Domain.Entities.Admin;
+using UserProfileService.Domain.Entities.Interviewer;
 using UserProfileService.Infrastructure.Persistance;
 
 namespace UserProfileService.Infrastructure.Repositories
@@ -50,8 +51,14 @@ namespace UserProfileService.Infrastructure.Repositories
                 .FirstOrDefaultAsync(d => d.Id == id);
         }
 
+        //public async Task<IReadOnlyCollection<Interviewer>> GetInterviewersByDepartmentAsync(int id)
+        //{
+        //    await _context.Departments.Include(i => i.)
+        //        .Include(i => i.)
+        //}
 
-      
+
+
     }
 
 

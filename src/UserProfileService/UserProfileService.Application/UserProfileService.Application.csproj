@@ -18,8 +18,4 @@
     <ProjectReference Include="..\UserProfileService.Domain\UserProfileService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Interviewer\Queries\" />
-  </ItemGroup>
-
 </Project>

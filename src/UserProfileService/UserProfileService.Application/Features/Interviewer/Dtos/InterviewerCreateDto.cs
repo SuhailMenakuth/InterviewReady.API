@@ -13,6 +13,10 @@ namespace UserProfileService.Application.Features.Interviewer.Dtos
 
         public string name { get; set; }
         public IFormFile photo { get; set; }
+        public string phone { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+        public string workingat { get; set; }
         public List<int> expertiseAreaIds { get; set; } = new();
 
     }

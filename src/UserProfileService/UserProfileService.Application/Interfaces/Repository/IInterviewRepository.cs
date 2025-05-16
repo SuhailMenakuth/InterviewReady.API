@@ -14,5 +14,6 @@ namespace UserProfileService.Application.Interfaces.Repository
         Task<IReadOnlyCollection<Interviewer>> GetAllInterviewerAsync();
         Task DeleteInterviewerAsync(Interviewer interviewer);
         Task<IReadOnlyCollection<Interviewer>> GetInterviewerByAreaAsync(int id);
+      
     }
 }

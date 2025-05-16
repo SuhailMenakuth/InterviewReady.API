@@ -38,7 +38,7 @@ namespace IdentiService.Application.Features.Auth.Commands.RegisterUser
                 var existingUserPassword = _passwordHasher.HashPassword(request.Password);
 
 
-                existingUser.FullName = request.FullName;
+                //existingUser.FullName = request.FullName;
                 existingUser.PhoneNumber = request.PhoneNumber;
                 existingUser.Password = existingUserPassword;
                 existingUser.UserType = UserType.Candidate;
@@ -54,7 +54,7 @@ namespace IdentiService.Application.Features.Auth.Commands.RegisterUser
 
                 var user = new User
                 {
-                    FullName = request.FullName,
+                    //FullName = request.FullName,
                     Email = request.Email,
                     PhoneNumber = request.PhoneNumber,
                     Password = password,

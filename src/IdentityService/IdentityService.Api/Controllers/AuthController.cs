@@ -2,9 +2,11 @@
 using IdentiService.Application.Features.Auth.Commands.LoginUser;
 using IdentiService.Application.Features.Auth.Commands.RegisterUser;
 using IdentiService.Application.Features.Auth.Dtos;
+using IdentiService.Application.Features.Auth.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 
 namespace IdentityService.Api.Controllers
 {
@@ -35,26 +37,35 @@ namespace IdentityService.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto userLoginDto , CancellationToken cancellationToken)
+        public async Task<IActionResult> Login(UserLoginDto userLoginDto, CancellationToken cancellationToken)
         {
             var command = new LoginUserCommand(userLoginDto);
-            var result = await _mediator.Send(command,cancellationToken);
-            return Ok(new { message = "login successfull" , token = result});
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(new { message = "login successfull", token = result });
         }
         [HttpPost("send-otp")]
-        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequestDto dto , CancellationToken cancellationToken)
+        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequestDto dto, CancellationToken cancellationToken)
         {
             var command = new SendOtpCommand(dto.email);
-            var result = await _mediator.Send(command,cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
             return Ok(new { Message = result });
         }
 
         [HttpPost("verify-otp")]
-        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequestDto dto ,CancellationToken cancellationToken)
+        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequestDto dto, CancellationToken cancellationToken)
         {
             var command = new VerifyOtpCommand(dto.Email, dto.Otp);
-            var result = await _mediator.Send(command,cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
             return Ok(new { Message = result });
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserReadDto>> GetUser(Guid id , CancellationToken cancellationToken)
+        {
+            var query = new GetUserByIdQuery(id);
+            var result = await _mediator.Send(query , cancellationToken);
+            return Ok(result);
+        }
+
     }
 } 

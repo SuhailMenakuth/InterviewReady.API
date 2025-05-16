@@ -15,9 +15,9 @@ namespace IdentityService.Infrastructure.Persistance.Configurations
         {
             builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.FullName)
-                .IsRequired()
-                .HasMaxLength(100);
+            //builder.Property(u => u.FullName)
+            //    .IsRequired()
+            //    .HasMaxLength(100);
 
             builder.Property(u => u.Email)
                 .IsRequired()

@@ -1,9 +1,4 @@
 ﻿using IdentityService.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IdentiService.Application.Interfaces.Repository
 {
@@ -11,6 +6,7 @@ namespace IdentiService.Application.Interfaces.Repository
     {
         
         Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByIdAsync(Guid id);
         Task<User?> GetVerifiedUserByEmailAsync(string email);
         Task AddUserAsync(User user);
         Task UpdateUserAsync();

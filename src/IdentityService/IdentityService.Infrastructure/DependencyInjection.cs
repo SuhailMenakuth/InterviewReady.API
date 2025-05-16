@@ -14,6 +14,8 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MassTransit;
+using IdentityService.Infrastructure.Consumers;
 
 namespace IdentityService.Infrastructure
 {
@@ -40,6 +42,26 @@ namespace IdentityService.Infrastructure
                     Credentials = new NetworkCredential(emailConfig.SmtpUser, emailConfig.SmtpPass),
                     EnableSsl = true,
                 });
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<InterviewerCreatedEventConsumer>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(configuration["RABBITMQ-HOST"], h =>
+                    {
+                        h.Username(configuration["RABBITMQ-USERNAME"]);
+                        h.Password(configuration["RABBITMQ-PASSWORD"]);
+                    });
+
+                    cfg.ReceiveEndpoint("interviewer-created-event-queue", e =>
+                    {
+                        e.ConfigureConsumer<InterviewerCreatedEventConsumer>(context);
+                    });
+                });
+            });
+
+
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAccessTokenGenerator, AccessTokenGenerator>();
             services.AddScoped<IEmailService, EmailService>();

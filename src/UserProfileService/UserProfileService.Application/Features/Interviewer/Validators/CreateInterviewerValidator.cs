@@ -16,9 +16,16 @@ namespace UserProfileService.Application.Features.Interviewer.Validators
                    .NotEmpty().WithMessage("Name cannot be empty ");
             RuleFor(x => x.photo)
                 .NotNull().WithMessage("Photo Cannot be empty ");
+            RuleFor(x => x.name)
+                .NotEmpty().WithMessage("Name cannot be empty");
             RuleFor(x => x.expertiseAreaIds)
                 .NotEmpty().WithMessage("atleast some area of expertise is required");
-                
+            RuleFor(x => x.email)
+                .NotEmpty().WithMessage("Email is required")
+                .EmailAddress().WithMessage("Invalid email address");
+            RuleFor(x => x.workingat)
+                .NotEmpty().WithMessage("wokingat cannot be empty");
+
 
         }
     }

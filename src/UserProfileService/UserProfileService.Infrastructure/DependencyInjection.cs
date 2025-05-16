@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,10 +28,27 @@ namespace UserProfileService.Infrastructure
                     sqlOptions => sqlOptions.EnableRetryOnFailure()
                 ));
 
+            services.AddMassTransit(x =>
+            {
+                x.SetKebabCaseEndpointNameFormatter();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(configuration["RABBITMQ-HOST"], h =>
+                    {
+                        h.Username(configuration["RABBITMQ-USERNAME"]);
+                        h.Password(configuration["RABBITMQ-PASSWORD"]);
+                    });
+                });
+            });
+
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IAreaRepository, AreaRepository>();
             services.AddScoped<IInterviewRepository , InterviewRepository>();
+
             services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<IUserEventPublisher, UserEventPublisher>();
+
             return services;
         }
     }

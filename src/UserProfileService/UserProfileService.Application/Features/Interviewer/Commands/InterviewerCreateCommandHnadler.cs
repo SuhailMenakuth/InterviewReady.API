@@ -1,29 +1,34 @@
 ﻿using AutoMapper;
+using InterviewReady.Messaging.Contracts.Enums;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserProfileService.Application.Interfaces.Repository;
 using UserProfileService.Application.Interfaces.Service;
 using UserProfileService.Domain.Entities.Interviewer;
+using UserProfileService.Infrastructure.Messaging.Events;
 
 namespace UserProfileService.Application.Features.Interviewer.Commands
 {
-    public class InterviewerCreateCommandHnadler : IRequestHandler<InterviewerCreateCommand, Guid>
+    public class InterviewerCreateCommandHandler : IRequestHandler<InterviewerCreateCommand, Guid>
+{
+    private readonly IAreaRepository _areaRepository;
+    private readonly IInterviewRepository _interviewerRepository;
+    private readonly IMapper _mapper;
+    private readonly ICloudinaryService _cloudinaryService;
+    private readonly IUserEventPublisher _userEventPublisher;
+
+    public InterviewerCreateCommandHandler(
+        IAreaRepository areaRepository,
+        IInterviewRepository interviewerRepository,
+        IMapper mapper,
+        ICloudinaryService cloudinaryService,
+        IUserEventPublisher userEventPublisher)
     {
-        private readonly IAreaRepository _areaRepository;
-        private readonly IInterviewRepository _interviewerRepository;
-        private readonly IMapper _mapper;
-        private readonly ICloudinaryService _cloudinaryService;
-        public InterviewerCreateCommandHnadler( IAreaRepository areaRepository , IInterviewRepository interviewRepository , IMapper mapper , ICloudinaryService cloudinaryService) 
-        {
-            _areaRepository = areaRepository;    
-            _interviewerRepository = interviewRepository; 
-            _mapper = mapper;
-            _cloudinaryService = cloudinaryService;
-        }
+        _areaRepository = areaRepository;
+        _interviewerRepository = interviewerRepository;
+        _mapper = mapper;
+        _cloudinaryService = cloudinaryService;
+        _userEventPublisher = userEventPublisher;
+    }
 
         public async Task<Guid> Handle(InterviewerCreateCommand request, CancellationToken cancellationToken)
         {
@@ -42,6 +47,19 @@ namespace UserProfileService.Application.Features.Interviewer.Commands
 
 
             var id = await _interviewerRepository.AddInterviewerAsync(interviewer);
+
+            await _userEventPublisher.PublishInterviewerCreatedAsync(new InterviewerCreatedEvent
+            {
+                UserId = id,
+                Email = request.Dto.email,
+                PhoneNumber = request.Dto.phone,
+                Password = dto.password,
+                UserType = UserType.Interviewer
+            });
+
+           
+
+
             return id;
         }
     }

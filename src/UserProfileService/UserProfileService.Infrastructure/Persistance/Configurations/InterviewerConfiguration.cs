@@ -17,13 +17,6 @@ namespace UserProfileService.Infrastructure.Persistance.Configurations
 
             builder.HasKey(i => i.Id);
 
-            builder.Property(i => i.Name)
-                   .IsRequired()
-                   .HasMaxLength(100);
-
-            builder.Property(i => i.About)
-                   .HasMaxLength(1000);
-
             builder.Property(i => i.Photo)
                    .HasMaxLength(255);
 

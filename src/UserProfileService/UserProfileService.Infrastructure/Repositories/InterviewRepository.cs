@@ -64,6 +64,6 @@ namespace UserProfileService.Infrastructure.Repositories
                 FirstOrDefaultAsync(i => i.Id == id);
         }
 
-
+     
     }
 }

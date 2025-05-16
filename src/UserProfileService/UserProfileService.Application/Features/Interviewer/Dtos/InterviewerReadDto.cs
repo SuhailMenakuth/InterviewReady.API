@@ -12,6 +12,7 @@ namespace UserProfileService.Application.Features.Interviewer.Dtos
         public string Name { get; set; }
         public string? About { get; set; }
         public string Photo { get; set; }
+        public string workingat { get; set; }
         public List<ExpertiseAreaDto> ExpertiseAreas { get; set; }
     }
 }

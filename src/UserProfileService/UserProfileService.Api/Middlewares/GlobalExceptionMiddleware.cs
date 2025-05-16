@@ -23,11 +23,13 @@ namespace UserProfileService.Api.Middlewares
             }
             catch (NotFoundException ex)
             {
+                _logger.LogError(ex, ex.Message);
                 context.Response.StatusCode = StatusCodes.Status404NotFound;
                 await WriteErrorResponse(context, ex.Message, false);
             }
             catch (ApplicationException ex)
             {
+                _logger.LogError(ex, ex.Message);
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await WriteErrorResponse(context, ex.Message, false);
             }

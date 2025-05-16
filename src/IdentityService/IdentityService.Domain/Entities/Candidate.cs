@@ -12,8 +12,6 @@ namespace IdentityService.Domain.Entities
     //    public UserTypes UserTypes { get; set; } = UserTypes.Candidate;
     //    public string? ProfilePhotoUrl {  get; set; }
     //    public string? CvUrl { get; set; }
-    //    public string? EducationDetails { get; set; }
-     
-        
+    //    public string? EducationDetails { get; set; 
     //}
 }

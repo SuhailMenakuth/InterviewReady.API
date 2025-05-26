@@ -1,6 +1,10 @@
 
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Text;
 using UserProfileService.Api.Middlewares;
 using UserProfileService.Application;
 using UserProfileService.Infrastructure;
@@ -24,7 +28,50 @@ namespace UserService.Api
             builder.Services.AddControllers();
           
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ProfileService", Version = "v1" });
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer' [space] and then your token"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] {}
+                }
+            });
+            });
+            var jwtSecret = Environment.GetEnvironmentVariable("JWT-SECRET-KEY");
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Environment.GetEnvironmentVariable("JWT-ISSUER"),
+                        ValidAudience = Environment.GetEnvironmentVariable("JWT-AUDIENCE"),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Configuration)
                 .Enrich.FromLogContext()
@@ -54,14 +101,17 @@ namespace UserService.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-            app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>(); 
+            app.UseHttpsRedirection();
+            app.UseAuthentication(); 
+            app.UseMiddleware<UserIdentificationMiddleware>(); 
+            app.UseAuthorization(); 
+            app.MapControllers();
 
 
             app.MapControllers();
-
             app.Run();
         }
     }

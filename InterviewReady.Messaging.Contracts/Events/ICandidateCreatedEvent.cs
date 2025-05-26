@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace InterviewReady.Messaging.Contracts.Events
 {
-    internal interface ICandidateCreateEvent
+    public interface ICandidateCreatedEvent
     {
+        public Guid Id { get; }
+        public string FullName { get; }
+
+
     }
 }

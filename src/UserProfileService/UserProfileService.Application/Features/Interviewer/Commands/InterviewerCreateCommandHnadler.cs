@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InterviewReady.Messaging.Contracts.Enums;
 using MediatR;
+using UserProfileService.Application.Interfaces.Events;
 using UserProfileService.Application.Interfaces.Repository;
 using UserProfileService.Application.Interfaces.Service;
 using UserProfileService.Domain.Entities.Interviewer;

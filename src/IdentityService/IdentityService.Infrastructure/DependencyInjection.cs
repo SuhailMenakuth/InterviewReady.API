@@ -16,6 +16,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MassTransit;
 using IdentityService.Infrastructure.Consumers;
+using InterviewReady.Messaging.Contracts.Events;
+using IdentiService.Application.Interfaces.Events;
+using IdentityService.Infrastructure.Publishers;
 
 namespace IdentityService.Infrastructure
 {
@@ -42,9 +45,29 @@ namespace IdentityService.Infrastructure
                     Credentials = new NetworkCredential(emailConfig.SmtpUser, emailConfig.SmtpPass),
                     EnableSsl = true,
                 });
+            //services.AddMassTransit(x =>
+            //{
+            //    x.AddConsumer<InterviewerCreatedEventConsumer>();
+
+            //    x.UsingRabbitMq((context, cfg) =>
+            //    {
+            //        cfg.Host(configuration["RABBITMQ-HOST"], h =>
+            //        {
+            //            h.Username(configuration["RABBITMQ-USERNAME"]);
+            //            h.Password(configuration["RABBITMQ-PASSWORD"]);
+            //        });
+
+            //        cfg.ReceiveEndpoint("interviewer-created-event-queue", e =>
+            //        {
+            //            e.ConfigureConsumer<InterviewerCreatedEventConsumer>(context);
+            //        });
+            //    });
+            //});
             services.AddMassTransit(x =>
             {
+                
                 x.AddConsumer<InterviewerCreatedEventConsumer>();
+
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -54,12 +77,17 @@ namespace IdentityService.Infrastructure
                         h.Password(configuration["RABBITMQ-PASSWORD"]);
                     });
 
+                    // 3️⃣ Configure endpoint for interviewer-created messages
                     cfg.ReceiveEndpoint("interviewer-created-event-queue", e =>
                     {
                         e.ConfigureConsumer<InterviewerCreatedEventConsumer>(context);
                     });
+
+                    // 4️⃣ Auto‑configure any other endpoints (none here, but good practice)
+                    cfg.ConfigureEndpoints(context);
                 });
             });
+
 
 
             services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -67,6 +95,7 @@ namespace IdentityService.Infrastructure
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IEmailVerificationRepository, EmailVerificationRepository>();
+            services.AddScoped<ICandidateCreatedEventPublisher, CandidateCreatedEventPublisher>();
 
 
             return services;

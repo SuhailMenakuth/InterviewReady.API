@@ -12,6 +12,6 @@ namespace IdentityService.Domain.Entities
         public string Email { get; set; } = string.Empty;
         public string Otp { get; set; } = string.Empty;
         public DateTime ExpiryTime { get; set; }
-        //public bool IsVerified { get; set; }
+      
     }
 }

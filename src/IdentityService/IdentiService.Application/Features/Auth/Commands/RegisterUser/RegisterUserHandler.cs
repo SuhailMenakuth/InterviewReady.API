@@ -1,13 +1,11 @@
-﻿using IdentiService.Application.Interfaces.Repository;
+﻿using IdentiService.Application.Interfaces.Events;
+using IdentiService.Application.Interfaces.Repository;
 using IdentiService.Application.Interfaces.Services;
 using IdentityService.Domain.Entities;
 using IdentityService.Domain.Enums;
+using InterviewReady.Messaging.Contracts.Events;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace IdentiService.Application.Features.Auth.Commands.RegisterUser
 {
@@ -15,12 +13,18 @@ namespace IdentiService.Application.Features.Auth.Commands.RegisterUser
     {
         private readonly IAuthRepository _authRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly ICandidateCreatedEventPublisher _candidateCreatedEventPublisher;
+        private readonly ILogger<RegisterUserHandler> _logger;
 
-        public RegisterUserHandler(IAuthRepository authRepository, IPasswordHasher passwordHasher)
+        public RegisterUserHandler(IAuthRepository authRepository, IPasswordHasher passwordHasher , ICandidateCreatedEventPublisher candidateCreatedEventPublisher , ILogger<RegisterUserHandler> logger)
         {
            _authRepository = authRepository;
             _passwordHasher = passwordHasher;
+            _candidateCreatedEventPublisher = candidateCreatedEventPublisher;
+            _logger = logger;
         }
+       
+
         public async Task<string> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             if (await _authRepository.IsUserEmailVerifiedAsync(request.Email))
@@ -32,29 +36,26 @@ namespace IdentiService.Application.Features.Auth.Commands.RegisterUser
             {
                 throw new ApplicationException("User already exists with this phone.");
             }
-            if(await _authRepository.IsUserUnverifiedByEmailAsync(request.Email))
+
+           
+
+            if (await _authRepository.IsUserUnverifiedByEmailAsync(request.Email))
             {
-                var existingUser =  await _authRepository.GetUserByEmailAsync(request.Email);
+               var user = await _authRepository.GetUserByEmailAsync(request.Email);
                 var existingUserPassword = _passwordHasher.HashPassword(request.Password);
 
-
-                //existingUser.FullName = request.FullName;
-                existingUser.PhoneNumber = request.PhoneNumber;
-                existingUser.Password = existingUserPassword;
-                existingUser.UserType = UserType.Candidate;
+                user.PhoneNumber = request.PhoneNumber;
+                user.Password = existingUserPassword;
+                user.UserType = UserType.Candidate;
 
                 await _authRepository.UpdateUserAsync();
-                return "Registration successfull";
-                    
             }
             else
             {
-
                 var password = _passwordHasher.HashPassword(request.Password);
-
-                var user = new User
+                  
+              var  user = new User
                 {
-                    //FullName = request.FullName,
                     Email = request.Email,
                     PhoneNumber = request.PhoneNumber,
                     Password = password,
@@ -62,9 +63,20 @@ namespace IdentiService.Application.Features.Auth.Commands.RegisterUser
                 };
 
                 await _authRepository.AddUserAsync(user);
-                return "Registration successfull";
+            _logger.LogInformation("Publishing CandidateCreatedEvent for User ID: {Id}", user.Id);
+
+            await _candidateCreatedEventPublisher.PublishCandidateCreatedAsync(new CandidateCreatedEvent
+            {
+                Id = user.Id,
+                FullName = request.FullName
+            });
+
+            _logger.LogInformation("CandidateCreatedEvent published successfully.");
             }
 
+
+            return "Registration successful";
         }
+
     }
 }

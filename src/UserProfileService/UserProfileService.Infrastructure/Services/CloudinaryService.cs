@@ -15,12 +15,6 @@ namespace UserProfileService.Infrastructure.Services
     public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary _cloudinary;
-        //public CloudinaryService(IOptions<CloudinarySettings> options)
-        //{
-        //    var settings = options.Value;
-        //    var account = new Account(settings.CloudName, settings.ApiKey, settings.ApiSecret);
-        //    _cloudinary = new Cloudinary(account);
-        //}
 
 
         public CloudinaryService(IConfiguration configuration)
@@ -49,15 +43,6 @@ namespace UserProfileService.Infrastructure.Services
                     Transformation = new Transformation().Quality("auto").FetchFormat("auto")
                 };
          
-            //else
-            //{
-            //    uploadParams = new ImageUploadParams
-            //    {
-            //        File = new FileDescription(file.FileName, stream),
-            //        Folder = "LabourWorkImages",
-            //        Transformation = new Transformation().Quality("auto").FetchFormat("auto")
-            //    };
-            //}
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
             if (uploadResult.Error != null)
             {
@@ -87,6 +72,41 @@ namespace UserProfileService.Infrastructure.Services
                 throw new Exception($"Failed to delete image with public ID: {publicId}. Error: {ex.Message}", ex);
             }
         }
+
+        public async Task<string> UploadDocumentAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("File cannot be null or empty", nameof(file));
+            }
+
+            var allowedExtensions = new[] { ".pdf", ".docx" };
+            var fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new InvalidOperationException("Only PDF and DOCX files are allowed.");
+            }
+
+            using var stream = file.OpenReadStream();
+
+            var uploadParams = new RawUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Folder = "CandidatesCv's",
+                PublicId = Path.GetFileNameWithoutExtension(file.FileName)
+            };
+
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+            if (uploadResult.Error != null)
+            {
+                throw new Exception($"Cloudinary upload error: {uploadResult.Error.Message}");
+            }
+
+            return uploadResult.SecureUrl.ToString();
+        }
+
 
         public string ExtractPublicIdFromUrl(string imageUrl)
         {

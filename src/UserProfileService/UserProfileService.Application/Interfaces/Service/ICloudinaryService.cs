@@ -12,5 +12,6 @@ namespace UserProfileService.Application.Interfaces.Service
         Task<string> UploadImageAsync(IFormFile file);
         Task<bool> DeleteImageAsync(string publicId);
         string ExtractPublicIdFromUrl(string imageUrl);
+        Task<string> UploadDocumentAsync(IFormFile file);
     }
 }

@@ -32,7 +32,7 @@ namespace IdentityService.Infrastructure.Consumers
             {
                 Id = message.UserId,
                 Email = message.Email,
-                PhoneNumber = message.PhoneNumber,
+                PhoneNumber = message.PhoneNumber,  
                 Password = password,
                 UserType = (Domain.Enums.UserType)message.UserType,
                 IsVerified = true 

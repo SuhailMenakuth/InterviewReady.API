@@ -18,12 +18,15 @@ namespace UserProfileService.Infrastructure.Persistance.Configurations
                    .HasMaxLength(100);
 
             builder.Property(c => c.PhotoUrl)
+                       .IsRequired(false)
                        .HasMaxLength(300);
 
             builder.Property(c => c.CvUrl)
+                       .IsRequired(false)
                        .HasMaxLength(300);
 
             builder.Property(c => c.HighestEducation)
+                       .IsRequired(false)
                        .HasMaxLength(150);
 
             builder.Property(c => c.CreatedOn)

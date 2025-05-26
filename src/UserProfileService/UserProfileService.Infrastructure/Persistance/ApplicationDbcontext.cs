@@ -20,6 +20,7 @@ namespace UserProfileService.Infrastructure.Persistance
        public DbSet<Interviewer> Interviewers { get; set; }
        public DbSet<InterviewerExpertiseArea> InterviewerExpertiseAreas { get; set; }
        public DbSet<Candidate> Candidates { get; set; }
+       public DbSet<CandidateSkill> CandidateSkills { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

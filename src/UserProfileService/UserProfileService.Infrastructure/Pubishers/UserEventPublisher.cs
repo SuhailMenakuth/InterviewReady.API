@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UserProfileService.Application.Interfaces.Service;
+using UserProfileService.Application.Interfaces.Events;
 
-namespace UserProfileService.Infrastructure.Services
+namespace UserProfileService.Infrastructure.Pubishers
 {
     public class UserEventPublisher : IUserEventPublisher
     {
@@ -20,13 +20,10 @@ namespace UserProfileService.Infrastructure.Services
 
         public async Task PublishInterviewerCreatedAsync(IInterviewerCreatedEvent @event)
         {
-            await _publishEndpoint.Publish<IInterviewerCreatedEvent>(@event);
+            await _publishEndpoint.Publish(@event);
         }
 
-        //Task IUserEventPublisher.PublishInterviewerCreatedAsync(object value)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
     }
 
 }

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace InterviewReady.Messaging.Contracts.Events
 {
-    internal class CandidateCreatedEvent
+    public class CandidateCreatedEvent : ICandidateCreatedEvent
     {
+        public Guid Id { get; set; }
+        public string FullName { get; set; }
     }
 }
